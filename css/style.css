@@ -1,0 +1,19 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+.main-table {
+    width: 70vw;
+    height: 100vh;
+}
+.table {
+}
+.row-table {
+    display: grid;
+    grid-template-columns: repeat(9, 1fr);
+    padding: 10px 20px;
+    border:solid black 1px;
+    border-collapse:collapse;
+    background-color: rgba(90, 236, 90, 0.5);
+}
