@@ -10,28 +10,19 @@
 </head>
 <body>
 <?php
-/**@var PDO $pdo*/
-require_once "backend/con_db.php";
-require_once "backend/functions.php";
-$stmt = $pdo->prepare("
-    SELECT CONCAT(cl.last_name,' ',cl.first_name) as full_name,
-           cl.phone as phone,
-           CONCAT(cl.debt,' руб') as debt,
-           CONCAT(c.make,' ', c.model,' ', c.color) as description_auto,
-           CONCAT_WS(', ',CONCAT('№',sp.spot_number),CONCAT('type: ',sp.spot_type)) as spot,
-           DATEDIFF(exit_time,entry_time) as days_parking,
-           CONCAT(r.day_rate * DATEDIFF(exit_time,entry_time),' тыс руб') as for_payment,
-           is_paid
-    FROM parking_sessions ps
-    JOIN cars c ON ps.car_id = c.car_id
-    JOIN parking_spots sp ON ps.spot_id = sp.spot_id
-    JOIN clients cl ON c.client_id = cl.client_id
-    JOIN rates r ON ps.rate_id = r.rate_id
-    WHERE  session_id");
-$stmt->execute();
-$sessionParking = $stmt->fetchAll();
-$tag = "div";
-$class = "cell";
+require_once 'config/connectionDb.php';
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+try {
+    $pdo = Database::getInstance();
+    $stmt = $pdo->prepare("SELECT * FROM parking_records ORDER BY id DESC");
+    $stmt->execute();
+    $records = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+    die("Оштбка базы данных: " . $e->getMessage());
+}
 ?>
 <section class="main-table">
     <div class="table">
@@ -46,34 +37,24 @@ $class = "cell";
             <div class="cell">Оплачена ли парковка</div>
             <div class="action cell">Действия с записью</div>
         </div>
-        <?php
-        if ($sessionParking) {
-
-            foreach ($sessionParking as $key => $value ) {
-            echo "<div class ='row-table'>";
-            wrapperTag($value["full_name"], $tag, $class);
-            wrapperTag($value["phone"], $tag, $class);
-            wrapperTag($value["debt"], $tag, $class);
-            wrapperTag($value["description_auto"], $tag, $class);
-            wrapperTag($value["spot"], $tag, $class);
-            wrapperTag($value["days_parking"], $tag, $class);
-            wrapperTag($value["for_payment"], $tag, $class);
-            if ($value["is_paid"] == 1) {
-                wrapperTag("Да", $tag, $class);
-            } else {
-                wrapperTag("Нет", $tag, $class);
-            }
-
-            echo "</div>";
-            }
-            echo "</div>";
-        } else {
-            die("Ошибка база данных пуста");
-        }
-        ?>
+        <?php if (!empty($records)): ?>
+            <?php foreach ($records as $row): ?>
+        <div class="row-table">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+        <?php endforeach; ?>
+        <?php else: ?>
+        <div>Данные отсутствают</div>
+        <?php endif; ?>
     </div>
 </section>
 </body>
 </html>
-
-
