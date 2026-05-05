@@ -17,3 +17,14 @@
     border-collapse:collapse;
     background-color: rgba(90, 236, 90, 0.5);
 }
+.row-data {
+    display: grid;
+    grid-template-columns: repeat(9, 1fr);
+    padding: 10px 20px;
+    background-color: azure;
+}
+.action {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
