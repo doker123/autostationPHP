@@ -11,6 +11,9 @@ function route($url): void
     $id = $url[1] ?? '';
 
     switch ($page) {
+        case 'create':
+            require_once 'views/create.php';
+            break;
         case 'view':
             if ($id && is_numeric($id)) {
                 require_once 'views/view.php';

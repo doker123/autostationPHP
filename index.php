@@ -1,5 +1,30 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Автостоянка</title>
+    <link rel="stylesheet" href="/autostationPHP/css/style.css">
+</head>
+<body>
+<header class="header-menu">
+    <a href="#"><h1>Автостоянка</h1></a>
+    <nav class="nav-menu">
+        <a class="create-row" href="views/create.php">Создать запись</a>
+    </nav>
+</header>
 <?php
 require_once 'config/router.php';
-
+require_once 'config/connectionDb.php';
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 $url = $_GET['url'] ?? '';
-route($url);
+?>
+<main class="main-content">
+    <?= route($url); ?>
+</main>
+</body>
+</html>

@@ -1,20 +1,8 @@
-<!doctype html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Автостоянка</title>
-    <link rel="stylesheet" href="/autostationPHP/css/style.css">
-</head>
-<body>
 <?php
 require_once 'config/connectionDb.php';
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
-
 try {
     $pdo = Database::getInstance();
     $stmt = $pdo->prepare("
@@ -75,7 +63,7 @@ try {
                         <?php } ?>
                     </div>
                     <div class="action">
-                        <a class="btn btn-wiev" href="view/<?= htmlspecialchars($row['parking_id'] ?? '')?>">Подробнее</a>
+                        <a class="btn btn-view" href="view/<?= htmlspecialchars($row['parking_id'] ?? '')?>">Подробнее</a>
                         <a class="btn btn-edit" href="edit/<?= htmlspecialchars($row['parking_id'] ?? '')?>">Редактировать</a>
                         <a class="btn btn-exit" href="delete/<?= htmlspecialchars($row['parking_id'] ?? '')?>">Удалить</a>
                     </div>
@@ -86,5 +74,3 @@ try {
         <?php endif; ?>
     </div>
 </section>
-</body>
-</html>
