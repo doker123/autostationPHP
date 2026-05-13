@@ -2,43 +2,40 @@
 
 function route($url): void
 {
-    $url = $_GET['url'] ?? '';
-    $url = ltrim($url, '/');
-    $url = explode('/', $url);
+    $url = ltrim($url, "/");
+    $url = explode("/", $url);
 
-    $page = $url[0] ?? 'home';
+    $page = $url[0] ?? "home";
 
-    $id = $url[1] ?? '';
+    $id = $url[1] ?? "";
 
     switch ($page) {
-        case 'create':
-            require_once 'views/create.php';
+        case "create":
+            require_once "views/create.php";
             break;
-        case 'view':
+        case "view":
             if ($id && is_numeric($id)) {
-                require_once 'views/view.php';
+                require_once "views/view.php";
             } else {
                 echo "Не указан id записи";
             }
             break;
-        case 'edit':
+        case "edit":
             if ($id && is_numeric($id)) {
-                require_once 'views/edit.php';
+                require_once "views/edit.php";
             } else {
                 echo "Не указан id записи";
             }
             break;
-        case 'delete':
+        case "delete":
             if ($id && is_numeric($id)) {
-                require_once 'views/delete.php';
+                require_once "views/delete.php";
             } else {
                 echo "Не указан id записи";
             }
             break;
         default:
-            require_once 'views/home.php';
+            require_once "views/home.php";
             break;
     }
 }
-
-

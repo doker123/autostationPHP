@@ -1,7 +1,7 @@
 <?php
-require_once 'config/connectionDb.php';
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
+require_once "config/connectionDb.php";
+ini_set("display_errors", 1);
+ini_set("display_startup_errors", 1);
 error_reporting(E_ALL);
 try {
     $pdo = Database::getInstance();
@@ -48,29 +48,59 @@ try {
         <?php if (!empty($records)): ?>
             <?php foreach ($records as $row): ?>
                 <div class="row-data">
-                    <div class="cell"><?= htmlspecialchars($row['full_name'] ?? '') ?></div>
-                    <div class="cell"><?= htmlspecialchars($row['phone'] ?? '') ?></div>
-                    <div class="cell"><?= number_format($row['debt'] ?? 0, 2, ',', ' ') ?> руб.</div>
-                    <div class="cell"><?= htmlspecialchars($row['car_appearance'] ?? 'Не указан') ?></div>
-                    <div class="cell"><?= htmlspecialchars($row['spot_number'] ?? '') ?></div>
-                    <div class="cell"><?= (new DateTime($row['entry_time']))->format('d.m.Y H:i') ?></div>
-                    <div class="cell"><?= number_format($row['total_price'] ?? 0, 2, ',', ' ') ?> руб.</div>
+                    <div class="cell"><?= htmlspecialchars(
+                        $row["full_name"] ?? "",
+                    ) ?></div>
+                    <div class="cell"><?= htmlspecialchars(
+                        $row["phone"] ?? "",
+                    ) ?></div>
+                    <div class="cell"><?= number_format(
+                        $row["debt"] ?? 0,
+                        2,
+                        ",",
+                        " ",
+                    ) ?> руб.</div>
+                    <div class="cell"><?= htmlspecialchars(
+                        $row["car_appearance"] ?? "Не указан",
+                    ) ?></div>
+                    <div class="cell"><?= htmlspecialchars(
+                        $row["spot_number"] ?? "",
+                    ) ?></div>
+                    <div class="cell"><?= new DateTime(
+                        $row["entry_time"],
+                    )->format("d.m.Y H:i") ?></div>
+                    <div class="cell"><?= number_format(
+                        $row["total_price"] ?? 0,
+                        2,
+                        ",",
+                        " ",
+                    ) ?> руб.</div>
                     <div class="cell">
-                        <?php if ($row['is_paid']) { ?>
+                        <?php if ($row["is_paid"]) { ?>
                             <span class="status-paid">Оплачено</span>
                         <?php } else { ?>
                             <span class="status-unpaid">Не оплачено</span>
                         <?php } ?>
                     </div>
                     <div class="action">
-                        <a class="btn btn-view" href="view/<?= htmlspecialchars($row['parking_id'] ?? '')?>">Подробнее</a>
-                        <a class="btn btn-edit" href="edit/<?= htmlspecialchars($row['parking_id'] ?? '')?>">Редактировать</a>
-                        <a class="btn btn-exit" href="delete/<?= htmlspecialchars($row['parking_id'] ?? '')?>">Удалить</a>
+                        <a class="btn btn-view" href="view/<?= htmlspecialchars(
+                            $row["parking_id"] ?? "",
+                        ) ?>">Подробнее</a>
+                        <a class="btn btn-edit" href="edit/<?= htmlspecialchars(
+                            $row["parking_id"] ?? "",
+                        ) ?>">Редактировать</a>
+                        <a class="btn btn-exit" href="delete/<?= htmlspecialchars(
+                            $row["parking_id"] ?? "",
+                        ) ?>">Удалить</a>
                     </div>
                 </div>
             <?php endforeach; ?>
         <?php else: ?>
             <div>Данные отсутствают</div>
         <?php endif; ?>
+        <div class="create-row">
+            <a class="create-row" href="create">Создать запись
+            </a>
+        </div>
     </div>
 </section>

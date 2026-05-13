@@ -10,21 +10,18 @@
 </head>
 <body>
 <header class="header-menu">
-    <a href="#"><h1>Автостоянка</h1></a>
-    <nav class="nav-menu">
-        <a class="create-row" href="views/create.php">Создать запись</a>
-    </nav>
+    <a href="home"><h1>Автостоянка</h1></a>
 </header>
 <?php
-require_once 'config/router.php';
-require_once 'config/connectionDb.php';
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
+require_once "config/router.php";
+require_once "config/connectionDb.php";
+ini_set("display_errors", 1);
+ini_set("display_startup_errors", 1);
 error_reporting(E_ALL);
-$url = $_GET['url'] ?? '';
+$url = $_GET["url"] ?? "";
 ?>
 <main class="main-content">
-    <?= route($url); ?>
+    <?php route($url); ?>
 </main>
 </body>
 </html>
