@@ -66,9 +66,7 @@ try {
                     <div class="cell"><?= htmlspecialchars(
                         $row["spot_number"] ?? "",
                     ) ?></div>
-                    <div class="cell"><?= new DateTime(
-                        $row["entry_time"],
-                    )->format("d.m.Y H:i") ?></div>
+                    <div class="cell"><?= (new DateTime($row["entry_time"]))->format("d.m.Y H:i") ?></div>
                     <div class="cell"><?= number_format(
                         $row["total_price"] ?? 0,
                         2,
