@@ -66,7 +66,9 @@ try {
                     <div class="cell"><?= htmlspecialchars(
                         $row["spot_number"] ?? "",
                     ) ?></div>
-                    <div class="cell"><?= (new DateTime($row["entry_time"]))->format("d.m.Y H:i") ?></div>
+                    <div class="cell"><?= new DateTime(
+                        $row["entry_time"],
+                    )->format("d.m.Y H:i") ?></div>
                     <div class="cell"><?= number_format(
                         $row["total_price"] ?? 0,
                         2,
@@ -87,7 +89,7 @@ try {
                         <a class="btn btn-edit" href="edit/<?= htmlspecialchars(
                             $row["parking_id"] ?? "",
                         ) ?>">Редактировать</a>
-                        <a class="btn btn-exit" href="delete/<?= htmlspecialchars(
+                        <a class="btn btn-delete" href="delete/<?= htmlspecialchars(
                             $row["parking_id"] ?? "",
                         ) ?>">Удалить</a>
                     </div>

@@ -10,9 +10,10 @@
 </head>
 <body>
 <header class="header-menu">
-    <a href="home"><h1>Автостоянка</h1></a>
+    <a href="/autostationPHP/home"><h1>Автостоянка</h1></a>
 </header>
 <?php
+
 require_once "config/router.php";
 require_once "config/connectionDb.php";
 ini_set("display_errors", 1);

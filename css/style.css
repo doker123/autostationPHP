@@ -10,27 +10,23 @@
 .header-menu {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    background-color: rgba(100, 236, 90, 0.5);
+
 }
 .row-table {
     display: grid;
     grid-template-columns: repeat(9, 1fr);
     padding: 10px 20px;
     border:solid black 1px;
-    border-collapse:collapse;
-    background-color: rgba(90, 236, 90, 0.5);
 }
 .row-data {
     display: grid;
     grid-template-columns: repeat(9, 1fr);
     padding: 10px 20px;
-    background-color: azure;
     text-align: center;
+    border: solid black 1px;
 }
 .create-row {
     padding: 10px 20px;
-    background-color: azure;
     text-align: center;
 }
 
@@ -39,6 +35,45 @@
     flex-direction: column;
     gap: 10px;
 }
+.btn {
+    color: whitesmoke;
+    text-decoration: none;
+    padding: 5px 15px;
+    border-radius: 5px;
+}
+.btn-view {
+    background-color:darkblue;
+    box-shadow: 0 5px 0 blue;
+}
+.btn-view:hover {
+    background: blue;
+    box-shadow: none;
+    position: relative;
+    top: 5px;
+}
+.btn-edit {
+    background-color:darkgreen;
+    box-shadow: 0 5px 0 green;
+}
+.btn-edit:hover {
+    background-color: green;
+    box-shadow: none;
+    position: relative;
+    top: 5px;
+}
+.btn-delete {
+    background-color: darkred;
+    box-shadow: 0 5px 0 red;
+}
+.btn-delete:hover {
+    background-color: red;
+    box-shadow: none;
+    position: relative;
+    top: 5px;
+}
 .cell {
     text-align: center;
+}
+.hidden {
+    display: none;
 }
