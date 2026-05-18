@@ -1,5 +1,31 @@
 <?php
 
+try {
+    $pdo = Database::getInstance();
+    $sql = "SELECT 
+            id AS tariff_id,
+            
+            CONCAT_WS(', ',tariff_name, description, price_per_hour) AS tariff_description
+            FROM tariffs
+            WHERE is_active = 1";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute();
+    $tariffs = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    $sql = "SELECT
+            id AS parking_id,
+            spot_number AS spot_number
+            FROM parking_spots
+            WHERE is_occupied = 0";
+    $stmt1 = $pdo->prepare($sql);
+    $stmt1->execute();
+    $spots = $stmt1->fetchAll(PDO::FETCH_ASSOC);
+
+} catch (PDOException $e) {
+    die("Ошибка базы данных: " . $e->getMessage());
+}
+
+
 $error = "";
 $success = "";
 
@@ -34,10 +60,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             <label for="select-tariff">Выберите тариф стаянки</label>
             <div class="select-wrapper">
                 <select id="select-tariff" name="select-tariff" required>
-                    <option value="value4" selected>Добавить свой тариф</option>
-                    <option value="value1">Дневной 100руб/час</option>
-                    <option value="value2">Ночной 50руб/час</option>
-                    <option value="value3">Суточный 800руб/день</option>
+                    <option value="create-tariff" selected>Добавить свой тариф</option>
+                    <?php foreach ($tariffs as $tariff ): ?>
+                    <option value="<?= htmlspecialchars($tariff['tariff_id'])?>">
+                        <?= htmlspecialchars($tariff['tariff_description'])?></option>
+                    <?php endforeach; ?>
                 </select>
             </div>
             <div class="input-tariff hidden">
@@ -81,13 +108,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             <label for="spot">Спот</label>
             <div class="select-wrapper">
                 <select id="spot" name="spot" required>
-                    <option value="value1" selected>Добавить новое место стоянки</option>
-                    <option value="value2">Спот 2</option>
-                    <option value="value3">Спот 3</option>
-                    <option value="value4">Спот 4</option>
+                    <option value="create-spot" selected>Добавить новое место стоянки</option>
+                    <?php foreach ($spots as $spot)?>
+                    <option value="<">
+                        Спот 2</option>
                 </select>
             </div>
         </div>
-        <input type="submit" value="Отправить"></input>
+        <input type="submit" value="Отправить">
     </form>
 </div>

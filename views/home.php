@@ -5,8 +5,7 @@ ini_set("display_startup_errors", 1);
 error_reporting(E_ALL);
 try {
     $pdo = Database::getInstance();
-    $stmt = $pdo->prepare("
-    SELECT
+    $sql = "SELECT
             u.full_name AS full_name,
             u.phone AS phone,
             COALESCE(p.total_price, 0) - COALESCE((
@@ -20,12 +19,12 @@ try {
             COALESCE(p.total_price, 0) AS total_price,
             p.is_paid AS is_paid,
             p.id AS parking_id
-        FROM parking p
-        JOIN cars c ON p.car_id = c.id
-        JOIN users u ON c.user_id = u.id
-        JOIN parking_spots ps ON p.parking_spot_id = ps.id
-        WHERE p.exit_time IS NULL
-    ");
+            FROM parking p
+            JOIN cars c ON p.car_id = c.id
+            JOIN users u ON c.user_id = u.id
+            JOIN parking_spots ps ON p.parking_spot_id = ps.id
+            WHERE p.exit_time IS NULL";
+    $stmt = $pdo->prepare($sql);
     $stmt->execute();
     $records = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
@@ -66,9 +65,21 @@ try {
                     <div class="cell"><?= htmlspecialchars(
                         $row["spot_number"] ?? "",
                     ) ?></div>
-                    <div class="cell"><?= new DateTime(
-                        $row["entry_time"],
-                    )->format("d.m.Y H:i") ?></div>
+                    <div class="cell">
+                        <?php
+                        $entryTime = $row["entry_time"] ?? '';
+                        if (!empty($entryTime)) {
+                            try {
+                                $dateTime = new DateTime($entryTime);
+                                echo $dateTime->format("d.m.Y H:i");
+                            } catch (Exception $e) {
+                                echo 'Некорректная дата';
+                            }
+                        } else {
+                            echo 'Дата отсутствует';
+                        }
+                        ?>
+                    </div>
                     <div class="cell"><?= number_format(
                         $row["total_price"] ?? 0,
                         2,
