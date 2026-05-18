@@ -4,7 +4,6 @@ try {
     $pdo = Database::getInstance();
     $sql = "SELECT 
             id AS tariff_id,
-            
             CONCAT_WS(', ',tariff_name, description, price_per_hour) AS tariff_description
             FROM tariffs
             WHERE is_active = 1";
@@ -35,7 +34,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $tariffKey = $_POST["select-tariff"] ?? "";
     if (isset($tariffs[$tariffKey])) {
         $tariff = $tariffs[$tariffKey];
-    } elseif ($tariffKey === "value4") {
+    } elseif ($tariffKey === "create-tariff") {
         $nameTariff = $_POST["name-tariff"] ?? "";
         $tariffPrice = $_POST["tariff-price"] ?? "";
         $minPrice = $_POST["min-price"] ?? "";
@@ -61,9 +60,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             <div class="select-wrapper">
                 <select id="select-tariff" name="select-tariff" required>
                     <option value="create-tariff" selected>Добавить свой тариф</option>
-                    <?php foreach ($tariffs as $tariff ): ?>
-                    <option value="<?= htmlspecialchars($tariff['tariff_id'])?>">
-                        <?= htmlspecialchars($tariff['tariff_description'])?></option>
+                    <?php foreach ($tariffs as $tariff): ?>
+                        <option value="<?= htmlspecialchars($tariff['tariff_id']) ?>">
+                            <?= htmlspecialchars($tariff['tariff_description']) ?></option>
                     <?php endforeach; ?>
                 </select>
             </div>
@@ -101,18 +100,34 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             </div>
             <div>
                 <label for="car_appearance">Повреждения на машине</label>
-                <input type="text" id="car_appearance" placeholder="Опешите повреждения если их нет напишите нет" required>
+                <input type="text" id="car_appearance" placeholder="Опешите повреждения если их нет напишите нет"
+                       required>
             </div>
         </div>
         <div class="spot">
-            <label for="spot">Спот</label>
+            <label for="spot">Место стоянки</label>
             <div class="select-wrapper">
                 <select id="spot" name="spot" required>
                     <option value="create-spot" selected>Добавить новое место стоянки</option>
-                    <?php foreach ($spots as $spot)?>
-                    <option value="<">
-                        Спот 2</option>
+                    <?php foreach ($spots as $spot): ?>
+                        <option value="<?= htmlspecialchars($spot['parking_id']) ?>">
+                            <?= htmlspecialchars($spot['spot_number']) ?></option>
+                    <?php endforeach; ?>
                 </select>
+            </div>
+            <div class="input-spot hidden">
+                <div>
+                    <label for="">Номер места</label>
+                    <input type="text" id="spot-number" name="spot-number" placeholder="A1">
+                </div>
+                <label for="type-spot">Тип парковочного места</label>
+                <div>
+                    <select id="type-spot" name="type-spot">
+                        <option value="regular" selected >Доступно</option>
+                        <option value="disabled">Недоступно</option>
+                        <option value="family">Служебный</option>
+                    </select>
+                </div>
             </div>
         </div>
         <input type="submit" value="Отправить">

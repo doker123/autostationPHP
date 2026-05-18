@@ -7,6 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Автостоянка</title>
     <link rel="stylesheet" href="/autostationPHP/css/style.css">
+    <script defer src="scripts/script.js" ></script>
 </head>
 <body>
 <header class="header-menu">
