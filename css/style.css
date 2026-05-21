@@ -10,13 +10,12 @@
 .header-menu {
     display: flex;
     flex-direction: column;
-
 }
 .row-table {
     display: grid;
     grid-template-columns: repeat(9, 1fr);
     padding: 10px 20px;
-    border:solid black 1px;
+    border: solid black 1px;
 }
 .row-data {
     display: grid;
@@ -42,7 +41,7 @@
     border-radius: 5px;
 }
 .btn-view {
-    background-color:darkblue;
+    background-color: darkblue;
     box-shadow: 0 5px 0 blue;
 }
 .btn-view:hover {
@@ -52,7 +51,7 @@
     top: 5px;
 }
 .btn-edit {
-    background-color:darkgreen;
+    background-color: darkgreen;
     box-shadow: 0 5px 0 green;
 }
 .btn-edit:hover {
@@ -74,6 +73,7 @@
 .cell {
     text-align: center;
 }
-.hidden {
+.input-tariff,
+.input-spot {
     display: none;
 }

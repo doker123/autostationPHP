@@ -1,8 +1,7 @@
 <?php
-
 try {
     $pdo = Database::getInstance();
-    $sql = "SELECT 
+    $sql = "SELECT
             id AS tariff_id,
             CONCAT_WS(', ',tariff_name, description, price_per_hour) AS tariff_description
             FROM tariffs
@@ -19,110 +18,152 @@ try {
     $stmt1 = $pdo->prepare($sql);
     $stmt1->execute();
     $spots = $stmt1->fetchAll(PDO::FETCH_ASSOC);
-
 } catch (PDOException $e) {
     die("Ошибка базы данных: " . $e->getMessage());
 }
 
-
-$error = "";
+$errors = [];
 $success = "";
-
+$old = [];
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $fullName = $_POST["fio"] ?? "";
-    $phone = $_POST["phone"] ?? "";
-    $tariffKey = $_POST["select-tariff"] ?? "";
-    if (isset($tariffs[$tariffKey])) {
-        $tariff = $tariffs[$tariffKey];
-    } elseif ($tariffKey === "create-tariff") {
-        $nameTariff = $_POST["name-tariff"] ?? "";
-        $tariffPrice = $_POST["tariff-price"] ?? "";
-        $minPrice = $_POST["min-price"] ?? "";
-        $description = $_POST["description"] ?? "";
+    $old["fio"] = trim($_POST["fio"] ?? "");
+    $old["phone"] = trim($_POST["phone"] ?? "");
+    $old["select_tariff"] = trim($_POST["select_tariff"] ?? "");
+    $old["name_tariff"] = trim($_POST["name_tariff"] ?? "");
+    $old["tariff_price"] = trim($_POST["tariff_price"] ?? "");
+    $old["min_price"] = trim($_POST["min_price"] ?? "");
+    $old["description"] = trim($_POST["description"] ?? "");
+    $old["licence_plate"] = trim($_POST["licence_plate"] ?? "");
+    $old["car_color"] = trim($_POST["car_color"] ?? "");
+    $old["car_model"] = trim($_POST["car_model"] ?? "");
+    $old["car_appearance"] = trim($_POST["car_appearance"] ?? "");
+    $old["spot"] = trim($_POST["spot"] ?? "");
+    $old["spot_number"] = trim($_POST["spot_number"] ?? "");
+    $old["type_spot"] = trim($_POST["type_spot"] ?? "");
+
+    if (
+        $old["fio"] === "" ||
+        $old["phone"] === "" ||
+        $old["select_tariff"] === "" ||
+        $old["licence_plate"] === "" ||
+        $old["car_color"] === "" ||
+        $old["car_model"] === "" ||
+        $old["car_appearance"] === "" ||
+        $old["spot"] === ""
+    ) {
+        $errors[] = "Обязательные поля не заполнены это ФИО, телефон, тариф,
+        номер машины и характеристики машины и место парковки.";
     }
 }
 ?>
 
 <div class="create-form">
-    <form action="/create" method="POST">
+    <form  method="POST">
         <div class="host-data">
             <div class="input-fio">
                 <label for="fio">Фио паркующегося</label>
-                <input type="text" id="fio" name="fio" placeholder="Name" required>
+                <input type="text" id="fio" name="fio" placeholder="Петров Петр Петрович"
+                 value="<?= htmlspecialchars($old["fio"] ?? "") ?>">
             </div>
             <div class="input-phone">
                 <label for="phone">Номер паркующегося</label>
-                <input type="tel" id="phone" name="phone" placeholder="+7999999999" required>
+                <input type="tel" autocomplete="tel" id="phone" name="phone" placeholder="+7999999999"
+                value="<?= htmlspecialchars($old["phone"] ?? "") ?>">
             </div>
         </div>
         <div class="tariff">
             <label for="select-tariff">Выберите тариф стаянки</label>
             <div class="select-wrapper">
-                <select id="select-tariff" name="select-tariff" required>
-                    <option value="create-tariff" selected>Добавить свой тариф</option>
+                <select id="select_tariff" name="select_tariff" >
+                    <option value="default"<?= ($old["select_tariff"] ?? "") ===
+                    "default"
+                        ? " selected"
+                        : "" ?>>Выберите тариф</option>
+                    <option value="create_tariff">Добавить свой тариф</option>
                     <?php foreach ($tariffs as $tariff): ?>
-                        <option value="<?= htmlspecialchars($tariff['tariff_id']) ?>">
-                            <?= htmlspecialchars($tariff['tariff_description']) ?></option>
+                        <option value="<?= htmlspecialchars(
+                            $tariff["tariff_id"],
+                        ) ?>">
+                        <?= htmlspecialchars(
+                            $tariff["tariff_description"],
+                        ) ?></option>
                     <?php endforeach; ?>
                 </select>
             </div>
-            <div class="input-tariff hidden">
+            <div class="input-tariff">
                 <div class="name-tariff">
-                    <label for="name-tariff">Название тарифа</label>
-                    <input type="text" id="name-tariff" name="name-tariff" placeholder="Дневной">
+                    <label for="name_tariff">Название тарифа</label>
+                    <input type="text" id="name_tariff" name="name_tariff" placeholder="Дневной"
+                    value="<?= htmlspecialchars($old["name_tariff"] ?? "") ?>">
                 </div>
                 <div class="price-tariff">
-                    <label for="price-tariff">Цена тарифа</label>
-                    <input type="text" id="price-tariff" name="price-tariff" placeholder="100">
+                    <label for="price_tariff">Цена тарифа</label>
+                    <input type="text" id="price_tariff" name="price_tariff" placeholder="100"
+                    value="<?= htmlspecialchars($old["price_tariff"] ?? "") ?>">
                 </div>
                 <div class="min-price">
-                    <label for="min-price">Минимальная оплата</label>
-                    <input type="text" id="min-price" name="min-price" placeholder="100">
+                    <label for="min_price">Минимальная оплата</label>
+                    <input type="text" id="min_price" name="min_price" placeholder="100"
+                    value="<?= htmlspecialchars($old["min_price"] ?? "") ?>">
                 </div>
                 <div class="description">
                     <label for="description">Описание</label>
-                    <input type="text" id="description" name="description" placeholder="Ночной - 50руб/ч">
+                    <input type="text" id="description" name="description" placeholder="Ночной - 50руб/ч"
+                    value="<?= htmlspecialchars($old["description"] ?? "") ?>">
                 </div>
             </div>
         </div>
         <div class="host-car">
             <div>
                 <label for="licence_plate">Номер машины</label>
-                <input type="text" id="licence_plate" name="licence_plate" placeholder="B123EX70RUS" required>
+                <input type="text" id="licence_plate" name="licence_plate" placeholder="B123EX70RUS"
+                value="<?= htmlspecialchars($old["licence_plate"] ?? "") ?>">
             </div>
             <div>
                 <label for="car_model">Модель машины</label>
-                <input type="text" id="car_model" name="car_model" placeholder="Ford Focus" required>
+                <input type="text" id="car_model" name="car_model" placeholder="Ford Focus"
+                value="<?= htmlspecialchars($old["car_model"] ?? "") ?>">
             </div>
             <div>
                 <label for="car_color">Цвет машины</label>
-                <input type="text" id="car_color" name="car_color" placeholder="Серебристый" required>
+                <input type="text" id="car_color" name="car_color" placeholder="Серебристый"
+                value="<?= htmlspecialchars($old["car_color"] ?? "") ?>">
             </div>
             <div>
                 <label for="car_appearance">Повреждения на машине</label>
-                <input type="text" id="car_appearance" placeholder="Опешите повреждения если их нет напишите нет"
-                       required>
+                <input type="text" id="car_appearance" name="car_appearance" placeholder="Опешите повреждения если их нет напишите нет"
+                value="<?= htmlspecialchars($old["car_appearance"] ?? "") ?>">
             </div>
         </div>
-        <div class="spot">
-            <label for="spot">Место стоянки</label>
+        <div class="spots">
+            <label for="spots">Место стоянки</label>
             <div class="select-wrapper">
-                <select id="spot" name="spot" required>
-                    <option value="create-spot" selected>Добавить новое место стоянки</option>
+                <select id="spot" name="spot">
+                    <option value="default" <?= ($old["spot"] ?? "") ===
+                    "default"
+                        ? "selected"
+                        : "" ?>>Выберите место стоянки</option>
+                    <option value="create_spot"  <?= ($old["spot"] ?? "") ===
+                    "create_spot"
+                        ? "selected"
+                        : "" ?>>Добавить новое место стоянки</option>
                     <?php foreach ($spots as $spot): ?>
-                        <option value="<?= htmlspecialchars($spot['parking_id']) ?>">
-                            <?= htmlspecialchars($spot['spot_number']) ?></option>
+                        <option value="<?= htmlspecialchars(
+                            $spot["parking_id"],
+                        ) ?>">
+                        <?= htmlspecialchars($spot["spot_number"]) ?></option>
                     <?php endforeach; ?>
                 </select>
             </div>
-            <div class="input-spot hidden">
+            <div class="input-spot">
                 <div>
-                    <label for="">Номер места</label>
-                    <input type="text" id="spot-number" name="spot-number" placeholder="A1">
+                    <label for="spot_number">Номер места</label>
+                    <input type="text" id="spot_number" name="spot_number" placeholder="A1"
+                    value="<?= htmlspecialchars($old["spot_number"] ?? "") ?>">
                 </div>
-                <label for="type-spot">Тип парковочного места</label>
                 <div>
-                    <select id="type-spot" name="type-spot">
+                    <label for="type_spot">Тип парковочного места</label>
+                    <select id="type_spot" name="type_spot">
                         <option value="regular" selected >Доступно</option>
                         <option value="disabled">Недоступно</option>
                         <option value="family">Служебный</option>
@@ -130,6 +171,15 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 </div>
             </div>
         </div>
-        <input type="submit" value="Отправить">
+        <div class="error-form">
+            <?php if (!empty($errors)): ?>
+                <ul>
+                    <?php foreach ($errors as $error): ?>
+                        <li><?php echo $error; ?></li>
+                    <?php endforeach; ?>
+                </ul>
+            <?php endif; ?>
+        </div>
+        <input class="btn-submit" type="submit" value="Отправить">
     </form>
 </div>
