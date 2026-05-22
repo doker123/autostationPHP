@@ -54,6 +54,30 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $errors[] = "Обязательные поля не заполнены это ФИО, телефон, тариф,
         номер машины и характеристики машины и место парковки.";
     }
+    if ($old["select_tariff"] === "create_tariff" &&
+        $old["name_tariff"] === "" ||
+        $old["min_price"] === "" ||
+        $old["description"] === "") {
+        $errors[] = "Если вы хатите создать тарифф в системе заполните обязательные поля: имя тарифа, минимальная оплата, описание тарифа.";
+    }
+    if ($old["spot"] === "create_spot" &&
+        $old["spot_number"] === "" || $old["type_spot"] === "") {
+        $errors[] = "Если вы хотите создать новое место стоянки то должны заполнить обязательные поля: номер места, тип места.";
+    }
+
+    if (empty($errors)){
+        try {
+            $pdo = Database::getInstance();
+            $sql = "";
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute([]);
+            $success = "Записи занесены в информационную систему успешно";
+
+        } catch (PDOException $e) {
+            $errors[] = 'Ошибка базы данных' . $e->getMessage();
+        }
+    }
+
 }
 ?>
 
@@ -72,7 +96,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             </div>
         </div>
         <div class="tariff">
-            <label for="select-tariff">Выберите тариф стаянки</label>
+            <label for="select_tariff">Выберите тариф стаянки</label>
             <div class="select-wrapper">
                 <select id="select_tariff" name="select_tariff" >
                     <option value="default"<?= ($old["select_tariff"] ?? "") ===
@@ -136,7 +160,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             </div>
         </div>
         <div class="spots">
-            <label for="spots">Место стоянки</label>
+            <label for="spot">Место стоянки</label>
             <div class="select-wrapper">
                 <select id="spot" name="spot">
                     <option value="default" <?= ($old["spot"] ?? "") ===

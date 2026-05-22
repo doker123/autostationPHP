@@ -29,11 +29,11 @@ function initConditionalVisibility(
 
 document.addEventListener("DOMContentLoaded", () => {
   initConditionalVisibility(
-    "#select-tariff",
+    "#select_tariff",
     ".input-tariff",
-    "create-tariff",
+    "create_tariff",
     "block",
   );
 
-  initConditionalVisibility("#spots", ".input-spot", "create-spot", "block");
+  initConditionalVisibility("#spot", ".input-spot", "create_spot", "block");
 });
