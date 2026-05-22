@@ -40,6 +40,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $old["spot"] = trim($_POST["spot"] ?? "");
     $old["spot_number"] = trim($_POST["spot_number"] ?? "");
     $old["type_spot"] = trim($_POST["type_spot"] ?? "");
+    $old["amount"] = trim($_POST["amount"] ?? "");
+    $old["payment_status"] = trim($_POST["payment_status"] ?? "");
+    $old["transaction_id"] = trim($_POST["transaction_id"] ?? "");
 
     if (
         $old["fio"] === "" ||
@@ -68,11 +71,18 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if (empty($errors)){
         try {
             $pdo = Database::getInstance();
+            $sql = "INSERT INTO users (full_name, phone) VALUES ('$old[fio]', '$old[phone]');";
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute([
+
+            ]);
             $sql = "";
             $stmt = $pdo->prepare($sql);
-            $stmt->execute([]);
-            $success = "Записи занесены в информационную систему успешно";
+            $stmt->execute([
 
+            ]);
+
+            $success = "Записи занесены в информационную систему успешно";
         } catch (PDOException $e) {
             $errors[] = 'Ошибка базы данных' . $e->getMessage();
         }
@@ -80,7 +90,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
 }
 ?>
-
 <div class="create-form">
     <form  method="POST">
         <div class="host-data">
@@ -99,10 +108,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             <label for="select_tariff">Выберите тариф стаянки</label>
             <div class="select-wrapper">
                 <select id="select_tariff" name="select_tariff" >
-                    <option value="default"<?= ($old["select_tariff"] ?? "") ===
-                    "default"
-                        ? " selected"
-                        : "" ?>>Выберите тариф</option>
+                    <option value="default">Выберите тариф</option>
                     <option value="create_tariff">Добавить свой тариф</option>
                     <?php foreach ($tariffs as $tariff): ?>
                         <option value="<?= htmlspecialchars(
@@ -159,18 +165,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 value="<?= htmlspecialchars($old["car_appearance"] ?? "") ?>">
             </div>
         </div>
-        <div class="spots">
+        <div class="spot">
             <label for="spot">Место стоянки</label>
             <div class="select-wrapper">
                 <select id="spot" name="spot">
-                    <option value="default" <?= ($old["spot"] ?? "") ===
-                    "default"
-                        ? "selected"
-                        : "" ?>>Выберите место стоянки</option>
-                    <option value="create_spot"  <?= ($old["spot"] ?? "") ===
-                    "create_spot"
-                        ? "selected"
-                        : "" ?>>Добавить новое место стоянки</option>
+                    <option value="default">Выберите место стоянки</option>
+                    <option value="create_spot">Добавить новое место стоянки</option>
                     <?php foreach ($spots as $spot): ?>
                         <option value="<?= htmlspecialchars(
                             $spot["parking_id"],
@@ -195,9 +195,29 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 </div>
             </div>
         </div>
+        <div class="payment">
+            <div class="amount">
+                <label for="amount">К оплате(руб)</label>
+                <input type="text" id="amount" name="amount" placeholder="300руб">
+            </div>
+            <div class="payment-status">
+                <label for="payment_status">Статус оплаты</label>
+                <div class="select-wrapper">
+                    <select id="payment_status" name="payment_status">
+                        <option value="pending" selected>В ожидании</option>
+                        <option value="completed">Успешно</option>
+                        <option value="failed">Провально</option>
+                    </select>
+                </div>
+            </div>
+            <div class="transaction-id">
+                <label for="transaction_id">ID Транзакции</label>
+                <input type="text" id="transaction_id" name="transaction_id" placeholder="TXN80121">
+            </div>
+        </div>
         <div class="error-form">
             <?php if (!empty($errors)): ?>
-                <ul>
+                <ul class="error-list">
                     <?php foreach ($errors as $error): ?>
                         <li><?php echo $error; ?></li>
                     <?php endforeach; ?>
