@@ -6,12 +6,17 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Автостоянка</title>
-    <link rel="stylesheet" href="/autostationPHP/css/style.css">
-    <script defer src="/autostationPHP/scripts/script.js" ></script>
+    <?php
+    $ROOT_PATH = __DIR__;
+    $parts = explode('/', trim($ROOT_PATH, '/'));
+    $pathRoot = '/'.$parts[4].'/';
+    ?>
+    <link rel="stylesheet" href="<?= $pathRoot ?>css/style.css">
+    <script defer src="<?= $pathRoot ?>scripts/script.js"></script>
 </head>
 <body>
 <header class="header-menu">
-    <a href="/autostationPHP/home"><h1>Автостоянка</h1></a>
+    <a href="<?= $pathRoot ?>home"><h1>Автостоянка</h1></a>
 </header>
 <?php
 require_once "config/router.php";
