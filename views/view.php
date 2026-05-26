@@ -25,8 +25,7 @@ try {
             JOIN cars c ON p.car_id = c.id
             JOIN users u ON c.user_id = u.id
             JOIN parking_spots ps ON p.parking_spot_id = ps.id
-            WHERE p.exit_time IS NULL 
-                AND p.id = :parking_id
+            WHERE p.id = :parking_id
     ");
     $stmt->execute(['parking_id' => $parking_id]);
     $record = $stmt->fetch(PDO::FETCH_ASSOC);
