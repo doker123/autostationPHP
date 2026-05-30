@@ -1,6 +1,6 @@
 <?php
 $parking_id = $id ?? '';
-$error_message = '';
+$errors = [];
 $record = null;
 
 
@@ -30,16 +30,17 @@ try {
     $stmt->execute(['parking_id' => $parking_id]);
     $record = $stmt->fetch(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
-    error_log("Ошибка БД" . $e->getMessage());
-    $error_message = "Произошлв ошибка Базы данных";
+    $errors[] = 'Ошибка базы данных' . $e->getMessage();
 }
 
 ?>
 
 <div class="container">
-    <?php if ($error_message): ?>
+    <?php if ($errors): ?>
         <div class="error">
-            <?php echo htmlspecialchars($error_message); ?>
+            <?php foreach ($errors as $error): ?>
+            <?php echo $error; ?>
+            <?php endforeach; ?>
         </div>
     <?php elseif ($record): ?>
         <div class="parking-card">
@@ -62,7 +63,7 @@ try {
 
             <div class="info-row">
                 <span class="info-label">Парковочное место:</span>
-                <span class="info-value">№<?php echo htmlspecialchars($record['spot_number']); ?></span>
+                <span class="info-value">№ <?php echo htmlspecialchars($record['spot_number']); ?></span>
             </div>
 
             <div class="info-row">
