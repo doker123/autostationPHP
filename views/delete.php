@@ -10,7 +10,10 @@ $record = null;
 try {
     $pdo = Database::getInstance();
     $pdo->beginTransaction();
-    $sql = "";
+
+//    $sql = "DELETE id FROM parkings WHERE id = :id";
+//    $stmt = $pdo->prepare($sql);
+//    $stmt->execute(['id' => $parking_id]);
 
 
 
